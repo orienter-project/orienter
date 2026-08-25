@@ -101,6 +101,9 @@ section{max-width:1200px;margin:0 auto;padding:5.5rem 2rem}
 .pv{font-family:var(--mono);font-size:.72rem;font-weight:400;color:var(--neon-bright)}
 .plk{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);text-decoration:none;border:1.5px solid var(--blue);padding:8px 18px;border-radius:8px;transition:all .25s;white-space:nowrap}
 .plk:hover{background:var(--blue);color:#fff}
+.plks{display:flex;flex-direction:column;gap:.5rem}
+.plk-soon{color:var(--muted);border-color:var(--border);cursor:default}
+.plk-soon:hover{background:none;color:var(--muted)}
 
 .fb{margin-top:1.5rem;padding:2rem 2.5rem;border:1px solid var(--border);border-radius:14px;background:var(--surface);display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap;transition:all .25s}
 .fb:hover{box-shadow:0 8px 30px rgba(37,99,235,.06)}
@@ -162,9 +165,9 @@ footer .brand{font-weight:700;background:var(--gradient-accent);-webkit-backgrou
 
 <section>
   <div class="sg fi">
-    <div class="sc"><div class="sn">1</div><div class="sl">Publications</div></div>
+    <div class="sc"><div class="sn">2</div><div class="sl">Publications</div></div>
     <div class="sc"><div class="sn">12</div><div class="sl">Researchers</div></div>
-    <div class="sc"><div class="sn">0K+</div><div class="sl">Clinical Samples</div></div>
+    <div class="sc"><div class="sn" data-count="1000">0+</div><div class="sl">Clinical Samples</div></div>
     <div class="sc"><div class="sn">4</div><div class="sl">Partner Institutions</div></div>
   </div>
 </section>
@@ -239,7 +242,8 @@ footer .brand{font-weight:700;background:var(--gradient-accent);-webkit-backgrou
 <section id="publications">
   <div class="sh fi"><div class="ey">Output</div><h2>Publications &#38; Talks</h2></div>
   <div class="pl fi">
-    <div class="pu"><span class="py">2026</span><div><h3>When Consistency Becomes Bias: Interviewer Effects in Semi-Structured Clinical Interviews</h3><div class="pa">H. Watawana, S. Burdisso, D. A. Moreno-Galv&#225;n, F. S&#225;nchez-Vega, A. Pastor L&#243;pez-Monroy, P. Motlicek, E. Villatoro-Tello</div><div class="pv">Accepted at LREC 2026</div></div><a href="https://arxiv.org/abs/2603.24651" target="_blank" class="plk">arXiv &#8599;</a></div>
+    <div class="pu"><span class="py">2026</span><div><h3>When Consistency Becomes Bias: Interviewer Effects in Semi-Structured Clinical Interviews</h3><div class="pa">H. Watawana, S. Burdisso, D. A. Moreno-Galv&#225;n, F. S&#225;nchez-Vega, A. Pastor L&#243;pez-Monroy, P. Motlicek, E. Villatoro-Tello</div><div class="pv">Accepted at LREC 2026</div></div><div class="plks"><a href="https://aclanthology.org/2026.lrec-1.185/" target="_blank" class="plk">ACL Anthology &#8599;</a><a href="https://arxiv.org/abs/2603.24651" target="_blank" class="plk">arXiv &#8599;</a></div></div>
+    <div class="pu"><span class="py">2026</span><div><h3>Modelling Thematic Structure in Clinical Dialogues for Interpretable Depression Detection</h3><div class="pa">E. Villatoro-Tello, E. A. Reyes-Ram&#237;rez, S. Burdisso, H. Watawana, P. Motlicek, F. S&#225;nchez-Vega, A. Pastor L&#243;pez-Monroy</div><div class="pv">Accepted at TSD 2026</div></div><div class="plks"><span class="plk plk-soon">Link coming soon</span></div></div>
   </div>
 </section>
 
@@ -269,6 +273,24 @@ window.addEventListener('scroll',function(){n.classList.toggle('scrolled',window
 document.getElementById('navToggle').addEventListener('click',function(){document.getElementById('navLinks').classList.toggle('open')});
 var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('visible');o.unobserve(x.target)}})},{threshold:0.1});
 document.querySelectorAll('.fi').forEach(function(el){o.observe(el)});
+
+var co=new IntersectionObserver(function(e){e.forEach(function(x){
+  if(!x.isIntersecting)return;
+  var el=x.target,target=parseInt(el.dataset.count,10),dur=1500,pause=2500;
+  function run(){
+    var start=null;
+    function step(ts){
+      if(!start)start=ts;
+      var p=Math.min((ts-start)/dur,1);
+      el.textContent=Math.floor(p*target)+'+';
+      if(p<1)requestAnimationFrame(step);else setTimeout(run,pause);
+    }
+    requestAnimationFrame(step);
+  }
+  run();
+  co.unobserve(el);
+})},{threshold:0.5});
+document.querySelectorAll('[data-count]').forEach(function(el){co.observe(el)});
 </script>
 </body>
 </html>
